@@ -15,10 +15,19 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
 add_executable(pub_cpp src/publisher.cpp)
-ament_target_dependencies(pub_cpp rclcpp std_msgs)
+add_executable(sub_cpp src/subscriber.cpp)
 
-install(TARGETS
-  pub_cpp
-  DESTINATION lib/${PROJECT_NAME})
+ament_target_dependencies(pub_cpp rclcpp std_msgs)
+ament_target_dependencies(sub_cpp rclcpp std_msgs)
+
+install(
+TARGETS pub_cpp sub_cpp
+DESTINATION lib/${PROJECT_NAME}
+)
+
+install(
+DIRECTORY launch
+DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()
