@@ -13,20 +13,25 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(example_interfaces REQUIRED)
 
 add_executable(pub_cpp src/publisher.cpp)
 add_executable(sub_cpp src/subscriber.cpp)
+add_executable(server_cpp src/server.cpp)
+add_executable(client_cpp src/client.cpp)
 
 ament_target_dependencies(pub_cpp rclcpp std_msgs)
 ament_target_dependencies(sub_cpp rclcpp std_msgs)
+ament_target_dependencies(server_cpp rclcpp example_interfaces)
+ament_target_dependencies(client_cpp rclcpp example_interfaces)
 
 install(
-TARGETS pub_cpp sub_cpp
+TARGETS pub_cpp sub_cpp server_cpp client_cpp
 DESTINATION lib/${PROJECT_NAME}
 )
 
 install(
-DIRECTORY launch
+DIRECTORY launch 
 DESTINATION share/${PROJECT_NAME}
 )
 
