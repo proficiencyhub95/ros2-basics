@@ -1,7 +1,7 @@
 # ROS2 Basics
 
 Welcome! This document introduces ROS 2 fundamentals including nodes, topics, services, parameters, and more—demonstrated through C++ examples.
-I have covered more C++ side 	
+I have covered more C++ side of ros2.
 
 ---
 
