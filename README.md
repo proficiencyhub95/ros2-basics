@@ -63,9 +63,9 @@ A full robotic system is comprised of many nodes working in concert. In ROS 2, a
 ### Some Commands 
 
 ```bash
-ros2 node list
+ros2 node list   # gives the list of nodes active
 
-ros2 node info node_name
+ros2 node info node_name   # gives all the info about a node like its topics, actions, parameters, services etc. 
 
-ros2 node list -t
+ros2 node list -t   # gives the list of nodes active along with their type
 ```
