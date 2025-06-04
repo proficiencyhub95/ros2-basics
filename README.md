@@ -58,6 +58,14 @@ Each node in ROS should be responsible for a single, modular purpose, e.g. contr
 
 A full robotic system is comprised of many nodes working in concert. In ROS 2, a single executable (C++ program, Python program, etc.) can contain one or more nodes.
 
-[Nodes](/images/Nodes.gif)
+![Nodes](/images/Nodes.gif)
 
+### Some Commands 
 
+```bash
+ros2 node list
+
+ros2 node info node_name
+
+ros2 node list -t
+```
