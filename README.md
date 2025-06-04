@@ -40,7 +40,7 @@ ROS (Robot Operating System) is an open-source robotics middleware (not an OS) t
 
 ROS 2 is the next generation of ROS, re-engineered to meet the demands of industrial, commercial, and real-time robotics applications. It is built with modern middleware (DDS) and better support for performance, scalability, and security.
 
-ROS 2 was designed to:
+### ROS 2 was designed to:
 
    - Fix architectural limitations of ROS 1
 
@@ -52,8 +52,12 @@ ROS 2 was designed to:
 
 ## Bascis of ROS2
 
+### Nodes
 
+Each node in ROS should be responsible for a single, modular purpose, e.g. controlling the wheel motors or publishing the sensor data from a laser range-finder. Each node can send and receive data from other nodes via topics, services, actions, or parameters.
 
+A full robotic system is comprised of many nodes working in concert. In ROS 2, a single executable (C++ program, Python program, etc.) can contain one or more nodes.
 
+[Nodes](/images/Nodes.gif)
 
 
