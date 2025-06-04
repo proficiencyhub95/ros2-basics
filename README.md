@@ -60,12 +60,62 @@ A full robotic system is comprised of many nodes working in concert. In ROS 2, a
 
 ![Nodes](/images/Nodes.gif)
 
-### Some Commands 
+### How to run a node ?
+
+```bash
+ros2 run <pkg_name> <exec_name>
+
+ros2 run demo_nodes_cpp talker
+
+ros2 run demo_nodes_cpp listener
+
+ros2 run turtlesim turtlesim_node
+```
+
+### Some node commands 
 
 ```bash
 ros2 node list   # gives the list of nodes active
 
-ros2 node info node_name   # gives all the info about a node like its topics, actions, parameters, services etc. 
+ros2 node info <node_name>   # gives the detailed info about a node 
 
 ros2 node list -t   # gives the list of nodes active along with their type
 ```
+
+### Topics
+
+ROS 2 breaks complex systems down into many modular nodes. Topics are a vital element of the ROS graph that act as a bus for nodes to exchange messages.
+
+![Single-Node-Topic](/images/Single-Topic.gif)
+
+A node may publish data to any number of topics and simultaneously have subscriptions to any number of topics.
+
+![Multiple-Node-Topic](/images/Multi-Topic.gif)
+	
+### Some topic commands
+
+```bash
+ros2 topic list   # gives the list of topics
+
+ros2 topic list -tros2 topic list -t   # gives the list of topics along with their types
+
+ros2 topic echo <topic_name>   # prints the data published on the topic
+
+ros2 topic info <topic_name>   # gives the detailed info about the topic
+
+ros2 interface show <topic_type>   # gives what structure of msg does the topic accepts
+
+ros2 topic pub <topic_name> <topic_type> '<args>'   # publishes data of given type to the given topic 
+
+ros2 topic hz <topic_name>   # prints the frequency of the topic
+
+ros2 topic bw <topic_name>   # prints the bandwidth of the topic
+
+ros2 topic find <topic_type>   # gives the list of topics of same topic type
+```
+
+
+
+
+
+
