@@ -1,7 +1,6 @@
 # ROS2 Basics
 
-Welcome! This document introduces ROS 2 fundamentals including nodes, topics, services, parameters, and more—demonstrated through C++ examples.
-I have covered more C++ side of ros2.
+Welcome! This document introduces ROS2 fundamentals including nodes, topics, services, parameters, and more demonstrated through C++ examples. I have covered more C++ side of ros2.
 
 ## Table of Contents
 
@@ -38,9 +37,9 @@ ROS (Robot Operating System) is an open-source robotics middleware (not an OS) t
 
 ## What is ROS2 ?
 
-ROS 2 is the next generation of ROS, re-engineered to meet the demands of industrial, commercial, and real-time robotics applications. It is built with modern middleware (DDS) and better support for performance, scalability, and security.
+ROS2 is the next generation of ROS, re-engineered to meet the demands of industrial, commercial, and real-time robotics applications. It is built with modern middleware (DDS) and better support for performance, scalability, and security.
 
-### ROS 2 was designed to:
+### ROS2 was designed to:
 
    - Fix architectural limitations of ROS 1
 
@@ -56,7 +55,7 @@ ROS 2 is the next generation of ROS, re-engineered to meet the demands of indust
 
 Each node in ROS should be responsible for a single, modular purpose, e.g. controlling the wheel motors or publishing the sensor data from a laser range-finder. Each node can send and receive data from other nodes via topics, services, actions, or parameters.
 
-A full robotic system is comprised of many nodes working in concert. In ROS 2, a single executable (C++ program, Python program, etc.) can contain one or more nodes.
+A full robotic system is comprised of many nodes working in concert. In ROS2, a single executable (C++ program, Python program, etc.) can contain one or more nodes.
 
 ![Nodes](/images/Nodes.gif)
 
@@ -84,7 +83,7 @@ ros2 node list -t   # gives the list of nodes active along with their type
 
 ### Topics
 
-ROS 2 breaks complex systems down into many modular nodes. Topics are a vital element of the ROS graph that act as a bus for nodes to exchange messages.
+ROS2 breaks complex systems down into many modular nodes. Topics are a vital element of the ROS graph that act as a bus for nodes to exchange messages.
 
 ![Single-Node-Topic](/images/Single-Topic.gif)
 
@@ -97,7 +96,7 @@ A node may publish data to any number of topics and simultaneously have subscrip
 ```bash
 ros2 topic list   # gives the list of topics
 
-ros2 topic list -tros2 topic list -t   # gives the list of topics along with their types
+ros2 topic list -t   # gives the list of topics along with their types
 
 ros2 topic echo <topic_name>   # prints the data published on the topic
 
@@ -113,6 +112,33 @@ ros2 topic bw <topic_name>   # prints the bandwidth of the topic
 
 ros2 topic find <topic_type>   # gives the list of topics of same topic type
 ```
+
+### Services
+
+Services are another method of communication for nodes in the ROS graph. Services are based on a call-and-response model versus the publisher-subscriber model of topics. While topics allow nodes to subscribe to data streams and get continual updates, services only provide data when they are specifically called by a client.
+
+![Services](/images/Service.gif)
+
+### Some service commands
+
+```bash
+ros2 service list   # gives the list of available services
+	
+ros2 service list -t   # gives the list of available services along with their types
+
+ros2 service type <service_name>   # prints the type of service
+
+ros2 service info <service_name>   # gives the detailed info about the service
+
+ros2 interface show <service_type>   # gives what structure of msg does the service accepts
+
+ros2 service call <service_name> <service_type> <arguments>   # it calls the service and arguments is optional here
+
+ros2 service find <service_type>   # gives the list of services of same type
+```
+
+
+
 
 
 
