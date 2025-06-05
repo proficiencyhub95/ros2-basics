@@ -4,23 +4,27 @@ Welcome! This document introduces ROS2 fundamentals including nodes, topics, ser
 
 ## Table of Contents
 
-1. [What is ROS2 ?](#what-is-ros-2)
-2. [Basics of ROS2](#basics-of-ros-2)  
-   - [Nodes](#nodes)  
-   - [Topics](#topics)  
-   - [Services](#services)  
-   - [Parameters](#parameters)  
-3. [Let's Start](#lets-start)  
-   - [Create a Colcon Workspace](#create-a-colcon-workspace)  
-   - [Create a C++ Publisher](#create-a-c-publisher)  
-   - [Create a C++ Subscriber](#create-a-c-subscriber)  
-   - [Launch Files](#launch-files)  
-4. [Parameters](#parameters-1)  
-   - [Create a Parameter](#create-a-parameter)  
-5. [Services](#services-1)  
-   - [Service Server](#service-server)  
-   - [Service Client](#service-client)
-
+1. [What is ROS2 ?]
+2. [Basics of ROS2] 
+   - [Nodes]  
+   - [Topics] 
+   - [Services] 
+   - [Parameters] 
+   - [Actions]
+3. [Let's Start] 
+   - [Create a Colcon Workspace] 
+   - [Create a C++ Publisher]
+   - [Create a C++ Subscriber]  
+   - [Launch Files]  
+4. [Parameters]  
+   - [Create a Parameter]  
+5. [Services]  
+   - [Create a Service Server]  
+   - [Create a Service Client]
+6. [Actions]
+   - [Create a Action Server]
+   - [Create a Action Client]
+   
 ## What is ROS ?
 
 ROS (Robot Operating System) is an open-source robotics middleware (not an OS) that provides tools, libraries, and conventions to simplify the task of creating complex and robust robot behavior across a wide variety of robotic platforms.
@@ -137,10 +141,55 @@ ros2 service call <service_name> <service_type> <arguments>   # it calls the ser
 ros2 service find <service_type>   # gives the list of services of same type
 ```
 
+### Parameters
 
+A parameter is a configuration value of a node. You can think of parameters as node settings. A node can store parameters as integers, floats, booleans, strings, and lists. In ROS2, each node maintains its own parameters.
 
+### Some parameters commands 
 
+```bash
+ros2 param list   # gives the list of available parameters of active nodes
+	
+ros2 param get <node_name> <parameter_name>   # gives the current value of the parameter
 
+ros2 param set <node_name> <parameter_name> <value>   # changes the value of the parameter to the given value
+
+ros2 param dump <node_name>   # prints the parameter's values
+
+ros2 param dump <node_name> > <file_name.yaml>   # stores the parameter's value in the file in yaml format
+
+ros2 param load <node_name> <parameter_file>   # loads the parameter from a file
+
+ros2 run <package_name> <executable_name> --ros-args --params-file <file_name>   # loads the parameters file on startup
+```
+
+### Actions 
+
+Actions are one of the communication types in ROS 2 and are intended for long running tasks. They consist of three parts: a goal, feedback, and a result.
+
+Actions are built on topics and services. Their functionality is similar to services, except actions can be canceled. They also provide steady feedback, as opposed to services which return a single response.
+
+Actions use a client-server model, similar to the publisher-subscriber model. An “action client” node sends a goal to an “action server” node that acknowledges the goal and returns a stream of feedback and a result.
+
+![Actions](/images/Action.gif)
+
+### Some action commands
+
+```bash
+ros2 action list   # gives the list of actions
+	
+ros2 action list -t   # gives the list of actions along with their types
+
+ros2 action type <action_name>   # prints the type of action
+
+ros2 action info <action_name>   # gives the detailed info about the action
+
+ros2 interface show <action_type>   # gives what structure of msg does the action accepts
+
+ros2 action send_goal <action_name> <action_type> <values>   # sends a goal to the action server. <values> needs to be in yaml format
+
+ros2 action send_goal <action_name> <action_type> <values> --feedback   # if we wish to get feedback
+```
 
 
 
