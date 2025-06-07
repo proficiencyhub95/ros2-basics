@@ -45,7 +45,7 @@ ROS2 is the next generation of ROS, re-engineered to meet the demands of industr
 
 ### ROS2 was designed to:
 
-   - Fix architectural limitations of ROS 1
+   - Fix architectural limitations of ROS 
 
    - Support real-time systems
 
@@ -191,6 +191,109 @@ ros2 action send_goal <action_name> <action_type> <values>   # sends a goal to t
 ros2 action send_goal <action_name> <action_type> <values> --feedback   # if we wish to get feedback
 ```
 
+## Let's Start
 
+### Create a Colcon Workspace
 
+**`colcon`** (collective construction) is the default build tool for ROS2. It replaces `catkin_make` and `catkin_tools` from ROS1. It can build multiple packages in a workspace, and supports mixed-language packages (e.g., C++, Python).
 
+Key features:
+
+- Parallel building
+
+- Clear dependency management
+
+- Isolated builds
+
+- Out-of-source builds
+
+#### What is ament_cmake ?
+
+**`ament_cmake`** is the CMake-based build system used in ROS2. It replaces the old ROS1 `catkin` system and is used for building C++ packages.
+
+#### What is ament_python ?
+
+**`ament_python`** is the Python build system used in ROS2 for creating and installing Python-based packages. It's commonly used for tools, nodes, and scripts written in Python.
+
+### Steps to create your own colcon c++ workspace 
+
+#### 1. Create the workspace
+
+```bash
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws
+```
+
+#### 2. Source your ros2 jazzy installation
+
+```bash
+source /opt/ros/jazzy/setup.bash
+```
+
+#### 3. Go to src folder and create our c++ package
+
+```bash
+cd src
+ros2 pkg create --build-type ament_cmake <pkg_name>   # any name you want to give 
+```
+
+#### 4. Write your first c++ node
+
+Edit your pkg_name/src/main.cpp
+
+```cpp
+#include "rclcpp/rclcpp.hpp"
+
+class MinimalNode : public rclcpp::Node 
+{
+public:
+  MinimalNode() : Node("minimal_node") 
+  {
+    RCLCPP_INFO(this->get_logger(), "Hello from ROS 2 C++ node!");
+  }
+};
+
+int main(int argc, char **argv) 
+{
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<MinimalNode>());
+  rclcpp::shutdown();
+  return 0;
+}
+```
+
+#### 5. Edit CMakeLists.txt
+
+```bash
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+
+add_executable(minimal_node src/main.cpp)
+ament_target_dependencies(minimal_node rclcpp std_msgs)
+
+install(TARGETS
+minimal_node
+DESTINATION lib/${PROJECT_NAME}
+)
+```
+
+#### 6. Build the workspace
+
+```bash
+cd ~/ros2_ws
+colcon build
+```
+
+#### 7. Source your workspace 
+
+Make sure you are in our ros2_ws directory
+
+```bash
+source install/setup.bash
+```
+
+#### 8. Run your node
+
+```bash
+ros2 run my_cpp_pkg minimal_node 
+```
