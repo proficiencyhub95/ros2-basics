@@ -29,7 +29,7 @@ Welcome! This document introduces ROS2 fundamentals including nodes, topics, ser
 
 ROS (Robot Operating System) is an open-source robotics middleware (not an OS) that provides tools, libraries, and conventions to simplify the task of creating complex and robust robot behavior across a wide variety of robotic platforms.
 
-### Key Features 
+#### Key Features 
 
    - Message Passing between processes (nodes) using topics and services.
 
@@ -43,7 +43,7 @@ ROS (Robot Operating System) is an open-source robotics middleware (not an OS) t
 
 ROS2 is the next generation of ROS, re-engineered to meet the demands of industrial, commercial, and real-time robotics applications. It is built with modern middleware (DDS) and better support for performance, scalability, and security.
 
-### ROS2 was designed to:
+#### ROS2 was designed to:
 
    - Fix architectural limitations of ROS 
 
@@ -53,7 +53,7 @@ ROS2 is the next generation of ROS, re-engineered to meet the demands of industr
 
    - Work across multiple platforms (including Windows and embedded systems)
 
-## Bascis of ROS2
+## Basics of ROS2
 
 ### Nodes
 
@@ -63,7 +63,7 @@ A full robotic system is comprised of many nodes working in concert. In ROS2, a 
 
 ![Nodes](/images/Nodes.gif)
 
-### How to run a node ?
+#### How to run a node ?
 
 ```bash
 ros2 run <pkg_name> <exec_name>
@@ -75,7 +75,7 @@ ros2 run demo_nodes_cpp listener
 ros2 run turtlesim turtlesim_node
 ```
 
-### Some node commands 
+#### Some node commands 
 
 ```bash
 ros2 node list   # gives the list of nodes active
@@ -95,7 +95,7 @@ A node may publish data to any number of topics and simultaneously have subscrip
 
 ![Multiple-Node-Topic](/images/Multi-Topic.gif)
 	
-### Some topic commands
+#### Some topic commands
 
 ```bash
 ros2 topic list   # gives the list of topics
@@ -123,7 +123,7 @@ Services are another method of communication for nodes in the ROS graph. Service
 
 ![Services](/images/Service.gif)
 
-### Some service commands
+#### Some service commands
 
 ```bash
 ros2 service list   # gives the list of available services
@@ -145,7 +145,7 @@ ros2 service find <service_type>   # gives the list of services of same type
 
 A parameter is a configuration value of a node. You can think of parameters as node settings. A node can store parameters as integers, floats, booleans, strings, and lists. In ROS2, each node maintains its own parameters.
 
-### Some parameters commands 
+#### Some parameter commands 
 
 ```bash
 ros2 param list   # gives the list of available parameters of active nodes
@@ -173,7 +173,7 @@ Actions use a client-server model, similar to the publisher-subscriber model. An
 
 ![Actions](/images/Action.gif)
 
-### Some action commands
+#### Some action commands
 
 ```bash
 ros2 action list   # gives the list of actions
