@@ -332,8 +332,7 @@ public:
 		pub = this->create_publisher<std_msgs::msg::String>("/proficiency", 10);
 		timer = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&Publisher::pubStr, this));
 		RCLCPP_INFO(this->get_logger(), "cpp publisher initiated");
-    };
-    
+   };   
 };
 
 int main(int argc, char *argv[])
@@ -441,4 +440,3 @@ colcon build --packages-select pkg_name
 ```bash
 ros2 launch my_robot_package my_robot_launch.py
 ```
-
