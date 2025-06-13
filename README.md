@@ -252,7 +252,7 @@ class MinimalNode : public rclcpp::Node
 public:
   MinimalNode() : Node("minimal_node") 
   {
-    RCLCPP_INFO(this->get_logger(), "Hello from ROS 2 C++ node!");
+    RCLCPP_INFO(this->get_logger(), "Hello from ROS2 C++ node!");
   }
 };
 
@@ -300,3 +300,145 @@ source install/setup.bash
 ```bash
 ros2 run my_cpp_pkg minimal_node 
 ```
+
+### Create a C++ Publisher 
+
+#### Code for C++ Publisher 
+
+```cpp
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
+
+class Publisher : public rclcpp::Node
+{
+private:
+	rclcpp::TimerBase::SharedPtr timer;
+	rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub;
+  	size_t count;
+  	
+  	void pubStr()
+  	{
+  		auto msg = std_msgs::msg::String();
+		msg.data = "hello" + std::to_string(this->count++);
+		std::string param = this->get_parameter("role").as_string();
+		RCLCPP_INFO(this->get_logger(), "published: '%s' & param: %s", msg.data.c_str(), param.c_str());
+		pub->publish(msg);
+  	}
+
+public:
+	Publisher() : Node("cpp_pub"), count(0)
+	{
+		this->declare_parameter("role", "unemployed");
+		pub = this->create_publisher<std_msgs::msg::String>("/proficiency", 10);
+		timer = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&Publisher::pubStr, this));
+		RCLCPP_INFO(this->get_logger(), "cpp publisher initiated");
+    };
+    
+};
+
+int main(int argc, char *argv[])
+{
+	rclcpp::init(argc, argv);
+	rclcpp::spin(std::make_shared<Publisher>());
+	rclcpp::shutdown();
+	return 0;
+}
+```
+
+### Create a C++ Subscriber 
+
+#### Code for C++ Subscriber
+
+```cpp
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
+
+class Subscriber : public rclcpp::Node
+{
+private:
+	rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub;
+
+	void sub_callback(const std_msgs::msg::String &msg)
+	{
+		RCLCPP_INFO(this->get_logger(), "heard: '%s'", msg.data.c_str());
+	}
+
+public:
+	Subscriber() : Node("cpp_sub")
+	{
+		sub = this->create_subscription<std_msgs::msg::String>("proficiency", 10, std::bind(&Subscriber::sub_callback, this, std::placeholders::_1));
+	}
+};
+
+int main(int argc, char *argv[])
+{
+	rclcpp::init(argc, argv);
+	rclcpp::spin(std::make_shared<Subscriber>());
+	rclcpp::shutdown();
+	return 0;
+}
+```
+
+### Launch Files 
+
+Launch files in ROS2 are Python scripts (.py files) used to start multiple nodes, set parameters, and define configurations in one place. They're part of the launch system that replaced the XML-style launch files from ROS1.
+
+Launch files make it easy to:
+
+- Run your robot simulation
+
+- Bring up drivers
+
+- Start RViz or Gazebo
+
+- Set topic remappings
+
+- Configure nodes with parameters
+
+### How to create a launch file
+
+#### 1. Create a launch directory inside your src 
+
+```bash
+mkdir pkg_name/src/launch
+```
+
+#### 2. Create a launch files inside your launch directory
+
+```python
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+   ld = LaunchDescription()
+
+   publisher_node = Node(
+      package="pkg_name",
+      executable="file_name",
+      name="pub_cpp",
+   )
+
+   subscriber_node = Node(
+      package="pkg_name",
+      executable="file_name",
+      name="sub_cpp",
+   )
+
+   ld.add_action(publisher_node)   # publisher node
+   ld.add_action(subscriber_node)   # subscriber node 
+   
+   return ld
+```
+
+#### 3. Build your package 
+
+```bash
+colcon build --packages-select pkg_name
+```
+
+#### 4. Run your launch file
+
+```bash
+ros2 launch my_robot_package my_robot_launch.py
+```
+
