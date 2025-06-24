@@ -468,15 +468,13 @@ Here, I have created a basic publisher in cpp. Then I have created a parameter `
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
 
-class Publisher : public rclcpp::Node
-{
+class Publisher : public rclcpp::Node {
 private:
 	rclcpp::TimerBase::SharedPtr timer;
 	rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub;
   	size_t count;
   	
-  	void pubStr()
-  	{
+  	void pubStr() {
   		auto msg = std_msgs::msg::String();
 		msg.data = "hello" + std::to_string(this->count++);
 		std::string param = this->get_parameter("role").as_string();
@@ -485,8 +483,7 @@ private:
   	}
 
 public:
-	Publisher() : Node("cpp_pub"), count(0)
-	{
+	Publisher() : Node("cpp_pub"), count(0) {
 		this->declare_parameter("role", "unemployed");
 		pub = this->create_publisher<std_msgs::msg::String>("/proficiency", 10);
 		timer = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&Publisher::pubStr, this));
@@ -495,8 +492,7 @@ public:
     
 };
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	rclcpp::init(argc, argv);
 	rclcpp::spin(std::make_shared<Publisher>());
 	rclcpp::shutdown();
