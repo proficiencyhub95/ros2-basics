@@ -1,9 +1,12 @@
 # ROS2 Basics
 
+Hello there :) 
+
 Welcome to my ROS2 Basics repository !!
 
-- This document introduces ROS2 fundamentals including nodes, topics, services, parameters, and more demonstrated through C++ examples. 
-- I have covered more C++ side of ros2.
+- I have documented ROS2 fundamental concepts like `nodes`, `topics`, `services`, `parameters`, `launch files` and much more. 
+
+- I have used mostly C++ language.
 
 ## Table of Contents
 
@@ -380,7 +383,7 @@ int main(int argc, char *argv[])
 
 ### Launch Files 
 
-Launch files in ROS2 are Python scripts (.py files) used to start multiple nodes, set parameters, and define configurations in one place. They're part of the launch system that replaced the XML-style launch files from ROS1.
+Launch files in ROS2 are Python scripts (.py files) used to start multiple nodes, set parameters, and define configurations in one place. They're part of the launch system that replaced the XML-style launch files from ROS.
 
 Launch files make it easy to:
 
@@ -459,7 +462,7 @@ Think of them as settings or configuration options for a node.
  
 - Persist across restarts (via YAML files)
 
-Here, I have created a basic publisher in cpp. Then I have created a parameter 'role' which I have initially given a value of 'unemployed'.
+Here, I have created a basic publisher in cpp. Then I have created a parameter `role` which I have initially given a value of `unemployed`.
 
 ```cpp 
 #include <rclcpp/rclcpp.hpp>
@@ -505,13 +508,6 @@ int main(int argc, char *argv[])
 
 ```bash 
 ros2 run pkg_name node_name --ros-args -p role:='robotics engineer'
-```
-
-#### How to set or get the parameter from cmd ? 
-
-```bash
-ros2 param set param_name 1.5
-ros2 param get param_name
 ```
 
 #### Real world applications 
