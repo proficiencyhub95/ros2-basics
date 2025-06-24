@@ -440,3 +440,86 @@ colcon build --packages-select pkg_name
 ```bash
 ros2 launch my_robot_package my_robot_launch.py
 ```
+
+## Parameters 
+
+### Create a Parameter 
+
+In ROS2, parameters are named values stored and managed by nodes, which can be used to configure the node’s behavior without changing code.
+
+Think of them as settings or configuration options for a node.
+
+#### Key Features:
+
+- Stored as key-value pairs
+
+- Can be set via launch files, command line, or dynamically during runtime
+ 
+- Support basic types: int, float, bool, string, arrays, etc.
+ 
+- Persist across restarts (via YAML files)
+
+Here, I have created a basic publisher in cpp. Then I have created a parameter 'role' which I have initially given a value of 'unemployed'.
+
+```cpp 
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
+
+class Publisher : public rclcpp::Node
+{
+private:
+	rclcpp::TimerBase::SharedPtr timer;
+	rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub;
+  	size_t count;
+  	
+  	void pubStr()
+  	{
+  		auto msg = std_msgs::msg::String();
+		msg.data = "hello" + std::to_string(this->count++);
+		std::string param = this->get_parameter("role").as_string();
+		RCLCPP_INFO(this->get_logger(), "published: '%s' & param: %s", msg.data.c_str(), param.c_str());
+		pub->publish(msg);
+  	}
+
+public:
+	Publisher() : Node("cpp_pub"), count(0)
+	{
+		this->declare_parameter("role", "unemployed");
+		pub = this->create_publisher<std_msgs::msg::String>("/proficiency", 10);
+		timer = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&Publisher::pubStr, this));
+		RCLCPP_INFO(this->get_logger(), "cpp publisher initiated");
+   };
+    
+};
+
+int main(int argc, char *argv[])
+{
+	rclcpp::init(argc, argv);
+	rclcpp::spin(std::make_shared<Publisher>());
+	rclcpp::shutdown();
+	return 0;
+}
+```
+
+#### For running 
+
+```bash 
+ros2 run pkg_name node_name --ros-args -p role:='robotics engineer'
+```
+
+#### How to set or get the parameter from cmd ? 
+
+```bash
+ros2 param set param_name 1.5
+ros2 param get param_name
+```
+
+#### Real world applications 
+
+1. Autonomous Delivery Robot : Parameters for route-following accuracy, obstacle thresholds, and camera FPS.
+
+2. Agricultural Drone : Parameters for spraying duration, flight altitude, GPS tolerance.
+
+3. Smart Home Robot Assistant : Adjusts parameters based on time of day, room layout, or user mood.
+
+4. Warehouse Automation System : Parameters control lift height, object detection threshold, safety buffers.
