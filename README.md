@@ -605,3 +605,101 @@ rclcpp::shutdown();
 ```bash
 ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{a: 10, b: 20}"
 ```
+
+### Create a service client
+
+```cpp
+#include "rclcpp/rclcpp.hpp"
+#include "example_interfaces/srv/add_two_ints.hpp"
+#include <chrono>
+#include <cstdlib>
+#include <memory>
+
+using namespace std::chrono_literals;
+
+int main(int argc, char **argv)
+{
+  rclcpp::init(argc, argv);
+
+  if (argc != 3) 
+  {
+      RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "usage: add_two_ints_client X Y");
+      return 1;
+  }
+
+  std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("client_cpp");
+  rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr client =
+  node->create_client<example_interfaces::srv::AddTwoInts>("add_two_ints");
+
+  auto request = std::make_shared<example_interfaces::srv::AddTwoInts::Request>();
+  request->a = atoll(argv[1]);
+  request->b = atoll(argv[2]);
+
+  while (!client->wait_for_service(1s)) 
+  {
+    if (!rclcpp::ok()) 
+    {
+      RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "interrupted while waiting for the service. exiting...");
+      return 0;
+    }
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
+  }
+
+  auto result = client->async_send_request(request);
+  
+  if (rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS)
+  {
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "sum: %ld", result.get()->sum);
+  } 
+  else 
+  {
+    RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "failed to call service add_two_ints");
+  }
+
+  rclcpp::shutdown();
+  
+  return 0;
+}
+```
+
+#### What it does ?
+
+- Connects to the `/add_two_ints` service (provided by a server).
+
+- Takes two numbers `X` and `Y` from command-line arguments.
+
+- Sends them to the server in a request.
+
+- Waits for the server’s response.
+
+- Prints the sum returned by the server.
+
+#### How to call the service ? 
+
+```bash
+ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{a: 10, b: 20}"
+```
+
+#### How to use ? 
+
+Step 1: Build the client (inside your ROS 2 workspace):
+
+Make sure it's added to `CMakeLists.txt` and `package.xml`.
+
+Step 2: Run the service server (in one terminal):
+
+```bash 
+ros2 run pkg_name service_server
+```
+
+Step 3: Run the client (in another terminal):
+
+```bash 
+ros2 run pkg_name service_client 10 25
+```
+
+#### Output 
+
+```bash 
+[INFO] sum: 35
+```
