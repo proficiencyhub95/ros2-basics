@@ -515,3 +515,93 @@ ros2 run pkg_name node_name --ros-args -p role:='robotics engineer'
 3. Smart Home Robot Assistant : Adjusts parameters based on time of day, room layout, or user mood.
 
 4. Warehouse Automation System : Parameters control lift height, object detection threshold, safety buffers.
+
+## Services 
+
+Services in ROS2 are a form of communication used for request-response interactions between nodes. They are synchronous, meaning the client waits for a response after sending a request.
+
+### Structure of a service
+
+A service is defined by a `.srv` file which contains:
+
+```bash
+# Request
+int64 a
+int64 b
+---
+# Response
+int64 sum
+```
+
+It has:
+
+- Request part (before `---`)
+
+- Response part (after `---`)
+
+### When to use services ? 
+
+Use services when:
+
+- You want a deterministic reply
+
+- You only need to exchange information once or infrequently
+
+#### Examples:
+
+- Triggering actions (`start_mapping`, `reset`, `save_map`)
+
+- Querying information (`get_pose`, `get_temperature`)
+
+- Parameter changes (`set_value`, `change_mode`)
+
+### Create a service server
+
+```cpp
+#include "rclcpp/rclcpp.hpp"
+#include "example_interfaces/srv/add_two_ints.hpp"
+#include <memory>
+
+void add(const std::shared_ptr<example_interfaces::srv::AddTwoInts::Request> request, 
+std::shared_ptr<example_interfaces::srv::AddTwoInts::Response> response)
+{
+response->sum = request->a + request->b;
+RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "incoming request\na: %ld" " b: %ld", request->a, request->b);
+RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "sending back response: [%ld]", (long int)response->sum);
+}
+
+int main(int argc, char **argv)
+{
+rclcpp::init(argc, argv);
+
+std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("server_cpp");
+
+rclcpp::Service<example_interfaces::srv::AddTwoInts>::SharedPtr service =
+node->create_service<example_interfaces::srv::AddTwoInts>("add_two_ints", &add);
+
+RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "cpp server initialized");
+
+rclcpp::spin(node);
+rclcpp::shutdown();
+}
+```
+
+#### What it does ?
+
+- Creates a ROS 2 node named `server_cpp`.
+
+- Advertises a service named `/add_two_ints` using the built-in service type `example_interfaces/srv/AddTwoInts`.
+
+- Waits for requests from a client that sends two integers: `a` and `b`.
+
+- Adds those `two` integers inside a callback function.
+
+- Sends back the `result (sum = a + b)` as the response to the client.
+
+- Logs the request and response to the terminal.
+
+#### How to call the service ? 
+
+```bash
+ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{a: 10, b: 20}"
+```
